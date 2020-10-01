@@ -33,7 +33,7 @@ namespace task {
     vector<double> operator+(const vector<double>& one, const vector<double>& two) {
         if (one.size() == two.size()) {
             vector<double> result;
-            for (int i = 0; i < one.size(); i++)
+            for (int i = 0; i < one.size(); ++i)
                 result.push_back(one[i] + two[i]);
             return result;
         }
@@ -47,7 +47,7 @@ namespace task {
     vector<double> operator-(const vector<double>& one, const vector<double>& two) {
         if (one.size() == two.size()) {
             vector<double> result;
-            for (int i = 0; i < one.size(); i++)
+            for (int i = 0; i < one.size(); ++i)
                 result.push_back(one[i] - two[i]);
             return result;
         }
@@ -105,7 +105,7 @@ namespace task {
         if (one.size() == two.size()) {
             int i = 0;
             while (i < one.size() && one[i] == two[i] && one[i] == 0)
-                i++;
+                ++i;
             if (i == one.size())
                 return false;
             if (one[i] != two[i] && (one[i] == 0 || two[i] == 0))
@@ -128,7 +128,7 @@ namespace task {
         if (one.size() == two.size()) {
             int i = 0;
             while (i < one.size() && one[i] == two[i] && one[i] == 0)
-                i++;
+                ++i;
             if (i == one.size())
                 return false;
             if (one[i] != two[i] && (one[i] == 0 || two[i] == 0))
