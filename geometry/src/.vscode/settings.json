@@ -1,9 +1,0 @@
-{
-    "files.associations": {
-        "cmath": "cpp",
-        "cstdlib": "cpp",
-        "xtr1common": "cpp",
-        "iostream": "cpp",
-        "utility": "cpp"
-    }
-}
