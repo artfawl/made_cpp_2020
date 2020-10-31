@@ -58,7 +58,7 @@ class Allocator {
 
   T* allocate(const size_t n) {
     if (last_storage[0] == nullptr) last_storage[0] = new Chunk();
-    if (n * bytes > last_storage[0]->SIZE) throw std::exception();
+    if (n * bytes > last_storage[0]->SIZE) return nullptr;
     Chunk* tmp = last_storage[0];
     while (tmp != nullptr) {
       if (tmp->SIZE - tmp->empty >= bytes * n) {
