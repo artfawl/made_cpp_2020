@@ -47,10 +47,33 @@ typename list<T, Alloc>::Node* list<T, Alloc>::_move_node(
 }
 
 template <class T, class Alloc>
-void list<T, Alloc>::_neutral_elem() {
+void list<T, Alloc>::_neutral_elem() {  // нейтральный элемент (root)
   Node* new_node = n_alloc.allocate(1);
   n_alloc.construct(new_node);
   root = new_node;
+}
+
+template <class T, class Alloc>
+void list<T, Alloc>::_cut(Node* to_cut) {  // вырезать ноду
+  to_cut->prev->next = to_cut->next;
+  to_cut->next->prev = to_cut->prev;
+  --length;
+}
+
+template <class T, class Alloc>
+void list<T, Alloc>::_insert(Node* after,
+                             Node* input) {  // вставить ноду после after
+  input->prev = after;
+  input->next = after->next;
+  after->next = input;
+  input->next->prev = input;
+  ++length;
+}
+
+template <class T, class Alloc>
+void list<T, Alloc>::_swap(Node* one,
+                           Node* two) {  // меняем 2 ноды местами в листе
+  std::swap(one->value, two->value);
 }
 
 template <class T, class Alloc>
@@ -141,20 +164,16 @@ list<T, Alloc>& list<T, Alloc>::operator=(const list& other) {
   if (this == &other) {
     return *this;
   } else {
-    this->~list();
-    _neutral_elem();
+    clear();
     if (_traits::propagate_on_container_copy_assignment::value) {
       allocator = other.allocator;
       n_alloc = other.n_alloc;
     }
+    allocator_type data_alloc_use =
+        (allocator == other.allocator) ? allocator : other.allocator;
 
-    // if (allocator == other.allocator) {
-    Alloc& data_alloc_use = allocator;
-    node_alloc_type& node_alloc_use = n_alloc;
-    //} else { // ошибка, так как other.allocator - это const Alloc
-    // Alloc& data_alloc_use = other.allocator;
-    // node_alloc_type& node_alloc_use = other.n_alloc;
-    //}
+    node_alloc_type node_alloc_use =
+        (n_alloc == other.n_alloc) ? n_alloc : other.n_alloc;
 
     Node* tmp = other.root->next;
     Node* add;
@@ -196,7 +215,7 @@ list<T, Alloc>& list<T, Alloc>::operator=(list&& other) {
 }
 
 template <class T, class Alloc>
-Alloc list<T, Alloc>::get_allocator() const {
+typename list<T, Alloc>::allocator_type list<T, Alloc>::get_allocator() const {
   return allocator;
 }
 
@@ -318,27 +337,6 @@ void list<T, Alloc>::resize(size_t count) {
   } else {
     throw std::overflow_error("overflow");
   }
-}
-
-template <class T, class Alloc>
-void list<T, Alloc>::_insert(Node* after, Node* input) {
-  input->prev = after;
-  input->next = after->next;
-  after->next = input;
-  input->next->prev = input;
-  ++length;
-}
-
-template <class T, class Alloc>
-void list<T, Alloc>::_cut(Node* to_cut) {
-  to_cut->prev->next = to_cut->next;
-  to_cut->next->prev = to_cut->prev;
-  --length;
-}
-
-template <class T, class Alloc>
-void list<T, Alloc>::_swap(Node* one, Node* two) {  // one раньше two
-  std::swap(one->value, two->value);
 }
 
 template <class T, class Alloc>

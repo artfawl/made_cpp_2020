@@ -32,7 +32,7 @@ class list {
   allocator_type allocator;
   node_alloc_type n_alloc;
   size_t length;
-  const size_t MAX_LENGTH = 1000000000;
+  const size_t MAX_LENGTH = SIZE_MAX;
 
   void _neutral_elem();
 
